@@ -1,8 +1,8 @@
 import {useQuery} from 'react-query';
 import {api} from './api';
 
-export const parseUsersFromAPI = data => {
-  const users = data?.results.map(user => ({
+const parseUsersFromAPI = data => {
+  const users = data?.results?.map(user => ({
     avatarURL: user?.picture?.medium,
     name: `${user.name?.title} ${user?.name?.first} ${user?.name?.last}`,
     email: user?.email,
@@ -15,17 +15,11 @@ export const parseUsersFromAPI = data => {
   return users;
 };
 
-async function fetchUsers({limit = 10}) {
-  const {data} = await api.get(`/?results=${limit}`);
-
+export async function fetchUsers() {
+  const {data} = await api.get('/?results=10');
   const usersParsed = parseUsersFromAPI(data);
 
   return usersParsed;
 }
 
-export function useUsers({limit}) {
-  const users = useQuery(['users', limit], () => fetchUsers({limit}), {
-    keepPreviousData: true,
-  });
-  return users;
-}
+export const useUsers = () => useQuery('users', fetchUsers);

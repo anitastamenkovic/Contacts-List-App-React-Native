@@ -1,33 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList} from 'react-native';
 
-import {useUsers} from '../services/use-users';
-import {removeData, storeData, getData} from '../services/storage';
+import {getUsers} from '../services/helpers';
 
 import Contact from '../components/Contact';
 
 export default function Contacts({navigation}) {
-  const [users, setUsers] = useState({});
-  const {data} = useUsers(10);
-  console.log('data', data);
+  const [users, setUsers] = useState([]);
+
+  const getAllUsers = async () => {
+    const storedUsers = await getUsers();
+    setUsers(storedUsers?.users);
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        await removeData();
-        if (data) {
-          await storeData({users: data});
-        }
-        const storedUsers = await getData();
-        if (storedUsers) {
-          setUsers(storedUsers.users);
-        }
-      } catch (e) {
-        console.log('contacts', e);
-      }
-    }
-    fetchData();
-  }, [data]);
+    getAllUsers();
+  });
 
   const goToProfileHandler = user => {
     navigation.navigate('Profile', {user: user});
