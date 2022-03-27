@@ -8,6 +8,8 @@ export const storeData = async value => {
     } catch (e) {
       console.log('storeData', e);
     }
+  } else {
+    return;
   }
 };
 
@@ -16,19 +18,11 @@ export const getData = async () => {
     const jsonValue = await AsyncStorage.getItem('users');
     if (jsonValue) {
       return JSON.parse(jsonValue);
+    } else {
+      return;
     }
-    return null;
-    // return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.log('getData', e);
-  }
-};
-
-export const editData = async value => {
-  try {
-    await AsyncStorage.mergeItem('users', JSON.stringify(value));
-  } catch (e) {
-    console.log('editData', e);
   }
 };
 

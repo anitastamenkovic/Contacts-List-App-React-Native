@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {editData, getData} from '../services/storage';
+import {editFavorites} from '../services/helpers';
 import Colors from '../constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -10,34 +10,8 @@ export default function Profile({route}) {
   const [isFavorite, setIsFavorite] = useState(user.isFavorite);
 
   useEffect(() => {
-    if (isFavorite) {
-      async function fetchFavoristesData() {
-        try {
-          const storedUsers = await getData();
-          const editedUsers = storedUsers?.users?.map(item =>
-            item.id === user.id ? {...item, isFavorite: isFavorite} : item,
-          );
-          editData({users: editedUsers});
-        } catch (exception) {
-          console.log('1', exception);
-        }
-      }
-      fetchFavoristesData();
-    } else {
-      async function fetchNotFavoritesData() {
-        try {
-          const storedUsers = await getData();
-          const editedUsers = storedUsers?.user?.map(item => {
-            item.id === user.id ? {...item, isFavorite: isFavorite} : item;
-          });
-          editData({users: editedUsers});
-        } catch (exception) {
-          console.log('2', exception);
-        }
-      }
-      fetchNotFavoritesData();
-    }
-  }, [user.id, isFavorite]);
+    editFavorites(user.id, isFavorite);
+  });
 
   const addToFavoriteHandler = () => {
     setIsFavorite(prevState => !prevState);

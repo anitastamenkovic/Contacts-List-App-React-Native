@@ -2,34 +2,26 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, Image, StyleSheet} from 'react-native';
 
 import Colors from '../constants/colors';
-import {getData} from '../services/storage';
+import {getFavorites} from '../services/helpers';
 
 export default function Favorites() {
-  const [users, setUsers] = useState([]);
+  const [favoriteUsers, setFavoriteUsers] = useState([]);
+
+  const getFavoritesUsers = async () => {
+    const favoriteUsersArr = await getFavorites();
+    setFavoriteUsers(favoriteUsersArr);
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const storedUsers = await getData();
-        storedUsers?.users?.filter(user => {
-          if (user?.isFavorite === true) {
-            setUsers({...users, user});
-          } else {
-            console.log('nema');
-          }
-        });
-      } catch (exception) {
-        setUsers([]);
-      }
-    }
-    fetchData();
-  }, [users]);
+    getFavoritesUsers();
+  });
+
   return (
     <View style={styles.screen}>
-      {users.length > 0 ? (
+      {favoriteUsers.length > 0 ? (
         <FlatList
           numColumns={3}
-          data={users}
+          data={favoriteUsers}
           renderItem={({item}) => (
             <View style={styles.imageContainer}>
               <Image
@@ -43,7 +35,7 @@ export default function Favorites() {
           keyExtractor={item => item.email}
         />
       ) : null}
-      {users.length < 1 ? (
+      {favoriteUsers.length === 0 ? (
         <Text style={styles.text}>There is no favorite users.</Text>
       ) : null}
     </View>
