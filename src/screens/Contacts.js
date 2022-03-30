@@ -11,6 +11,9 @@ export default function Contacts({navigation}) {
   const getAllUsers = async () => {
     const storedUsers = await getUsers();
     setUsers(storedUsers?.users);
+    return () => {
+      setUsers([]);
+    };
   };
 
   useEffect(() => {

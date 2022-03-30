@@ -14,11 +14,14 @@ import MyProfileNavigator from './navigators/MyProfileNavigator';
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigation() {
-  const {data} = useUsers();
+  const {data, isSuccess} = useUsers();
+  console.log(data);
 
   useEffect(() => {
-    fetchData(data);
-  }, [data]);
+    if (isSuccess) {
+      fetchData(data);
+    }
+  }, [data, isSuccess]);
 
   return (
     <NavigationContainer>

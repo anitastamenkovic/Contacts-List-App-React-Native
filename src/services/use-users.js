@@ -22,4 +22,7 @@ export async function fetchUsers() {
   return usersParsed;
 }
 
-export const useUsers = () => useQuery('users', fetchUsers);
+export const useUsers = () =>
+  useQuery('users', fetchUsers, {
+    keepPreviousData: false,
+  });
