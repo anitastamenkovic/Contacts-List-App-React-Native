@@ -15,9 +15,10 @@ const Tab = createBottomTabNavigator();
 
 export default function AppNavigation() {
   const {data} = useUsers();
+
   useEffect(() => {
     fetchData(data);
-  });
+  }, [data]);
 
   return (
     <NavigationContainer>

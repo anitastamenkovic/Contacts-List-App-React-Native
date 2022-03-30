@@ -1,17 +1,34 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {editFavorites} from '../services/helpers';
+import {getUser, editFavorites} from '../services/helpers';
 import Colors from '../constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Profile({route}) {
-  const {user} = route?.params;
-  const [isFavorite, setIsFavorite] = useState(user.isFavorite);
+export default function Profile({route, navigation}) {
+  const userId = route?.params.userId;
+
+  const [user, setUser] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const getSelectedUser = async id => {
+    const selectedUser = await getUser(id);
+    setUser(selectedUser);
+    setIsFavorite(selectedUser.isFavorite);
+  };
 
   useEffect(() => {
-    editFavorites(user.id, isFavorite);
-  });
+    getSelectedUser(userId);
+  }, [userId]);
+
+  useEffect(() => {
+    editFavorites(userId, isFavorite);
+  }, [userId, isFavorite]);
+
+  useLayoutEffect(() => {
+    const userName = user?.name;
+    navigation.setOptions({title: userName});
+  }, [user, navigation]);
 
   const addToFavoriteHandler = () => {
     setIsFavorite(prevState => !prevState);

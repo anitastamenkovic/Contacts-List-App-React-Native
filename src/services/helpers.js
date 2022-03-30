@@ -19,6 +19,14 @@ export const getUsers = async () => {
   }
 };
 
+export const getUser = async id => {
+  const storedUsers = await getUsers();
+  const selectedUser = storedUsers.users.find(user => {
+    return user.id === id;
+  });
+  return selectedUser;
+};
+
 export const getFavorites = async () => {
   try {
     const storedUsers = await getData();

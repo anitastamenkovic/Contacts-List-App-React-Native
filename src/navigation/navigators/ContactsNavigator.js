@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+import Colors from '../../constants/colors';
 import Contacts from '../../screens/Contacts';
 import Profile from '../../screens/Profile';
 
@@ -13,7 +14,10 @@ export default function ContactsNavigator() {
       <ContactsStack.Screen
         name="Profile"
         component={Profile}
-        options={({route}) => ({title: route.params.user.name})}
+        options={{
+          headerStyle: {backgroundColor: Colors.primary},
+          headerTintColor: Colors.lightPrimary,
+        }}
       />
     </ContactsStack.Navigator>
   );

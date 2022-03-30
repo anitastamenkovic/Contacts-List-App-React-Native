@@ -18,7 +18,7 @@ export default function Contacts({navigation}) {
   });
 
   const goToProfileHandler = user => {
-    navigation.navigate('Profile', {user: user});
+    navigation.navigate('Profile', {userId: user.id});
   };
 
   return (
