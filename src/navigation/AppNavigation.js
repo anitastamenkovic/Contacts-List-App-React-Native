@@ -15,7 +15,6 @@ const Tab = createBottomTabNavigator();
 
 export default function AppNavigation() {
   const {data, isSuccess} = useUsers();
-  console.log(data);
 
   useEffect(() => {
     if (isSuccess) {
