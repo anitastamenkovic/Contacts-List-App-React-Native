@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, Text, FlatList, Image, StyleSheet} from 'react-native';
 
 import Colors from '../constants/colors';
@@ -7,13 +7,19 @@ import {getFavorites} from '../services/helpers';
 export default function Favorites() {
   const [favoriteUsers, setFavoriteUsers] = useState([]);
 
-  const getFavoritesUsers = async () => {
+  const getFavoritesUsers = useCallback(async () => {
     const favoriteUsersArr = await getFavorites();
     setFavoriteUsers(favoriteUsersArr);
-  };
+  }, []);
 
   useEffect(() => {
-    getFavoritesUsers();
+    let isMounted = true;
+    if (isMounted) {
+      getFavoritesUsers();
+    }
+    return () => {
+      isMounted = false;
+    };
   });
 
   return (

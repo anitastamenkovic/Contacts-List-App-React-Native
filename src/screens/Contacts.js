@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, FlatList} from 'react-native';
 
 import {getUsers} from '../services/helpers';
@@ -8,13 +8,19 @@ import Contact from '../components/Contact';
 export default function Contacts({navigation}) {
   const [users, setUsers] = useState([]);
 
-  const getAllUsers = async () => {
+  const getAllUsers = useCallback(async () => {
     const storedUsers = await getUsers();
     setUsers(storedUsers?.users);
-  };
+  }, []);
 
   useEffect(() => {
-    getAllUsers();
+    let isMounted = true;
+    if (isMounted) {
+      getAllUsers();
+    }
+    return () => {
+      isMounted = false;
+    };
   });
 
   const goToProfileHandler = user => {

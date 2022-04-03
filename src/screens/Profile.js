@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect, useCallback} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {getUser, editFavorites} from '../services/helpers';
@@ -11,18 +11,30 @@ export default function Profile({route, navigation}) {
   const [user, setUser] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const getSelectedUser = async id => {
+  const getSelectedUser = useCallback(async id => {
     const selectedUser = await getUser(id);
     setUser(selectedUser);
     setIsFavorite(selectedUser.isFavorite);
-  };
+  }, []);
 
   useEffect(() => {
-    getSelectedUser(userId);
-  }, [userId]);
+    let isMounted = true;
+    if (isMounted) {
+      getSelectedUser(userId);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [userId, getSelectedUser]);
 
   useEffect(() => {
-    editFavorites(userId, isFavorite);
+    let isMounted = true;
+    if (isMounted) {
+      editFavorites(userId, isFavorite);
+    }
+    return () => {
+      isMounted = false;
+    };
   }, [userId, isFavorite]);
 
   useLayoutEffect(() => {
