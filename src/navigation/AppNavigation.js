@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {fetchData} from '../services/helpers';
+import {storeUsers} from '../services/helpers';
 import {useUsers} from '../services/use-users';
 import Colors from '../constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,7 +18,7 @@ export default function AppNavigation() {
 
   useEffect(() => {
     if (isSuccess) {
-      fetchData(data);
+      storeUsers(data);
     }
   }, [data, isSuccess]);
 

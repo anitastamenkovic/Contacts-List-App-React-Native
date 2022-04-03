@@ -1,6 +1,6 @@
 import {storeData, getData} from './storage';
 
-export const fetchData = async data => {
+export const storeUsers = async data => {
   try {
     if (data.length > 0) {
       await storeData({users: data});
